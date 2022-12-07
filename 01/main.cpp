@@ -1,10 +1,8 @@
 #include <iostream>
 #include <fstream>
-#include <time.h>
 
 int main()
 {
-    clock_t clk = clock();
     std::ifstream input("../03/input");
     std::string line;
     int sum = 0, sum2 = 0, linenum = 0;
@@ -60,9 +58,6 @@ int main()
         }
     }
     input.close();
-    clk = clock() - clk;
-    std::cout.precision(10);
-    std::cout << "Part 1: " << sum << " \nPart 2: " << sum2 << std::endl
-              << "Time taken: " << (double)clk / CLOCKS_PER_SEC << "s\n";
+    std::cout << "Part 1: " << sum << " \nPart 2: " << sum2 << std::endl;
     return 0;
 }

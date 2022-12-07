@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 
-int start(std::string &line, int min)
+int start(const std::string &line, int min)
 {
     int chars[26] = {0};
     int dupl = 0;
@@ -24,14 +24,12 @@ int start(std::string &line, int min)
 
 int main()
 {
-    clock_t time = clock();
     std::ifstream input("../06/input");
     std::string line;
     getline(input, line);
     input.close();
     int packet_start = start(line, 4);
     int msg_start = start(line, 14);
-    std::cout << "Number of chars before packet: " << packet_start + 1 << "\nNumber of chars before message: " << msg_start + 1 << std::endl
-              << double(clock() - time) / CLOCKS_PER_SEC;
+    std::cout << "Number of chars before packet: " << packet_start + 1 << "\nNumber of chars before message: " << msg_start + 1 << std::endl;
     return 0;
 }
