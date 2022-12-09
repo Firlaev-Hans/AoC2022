@@ -4,6 +4,7 @@
 #include <cmath>
 
 const int canvas_corners[4] = {0, 5, -5, 0};
+const int knots_count = 2;
 
 bool touching(int headpos[2], int tailpos[2])
 {
@@ -80,7 +81,7 @@ int main()
             default:
                 knotpositions[0][1]++;
             }
-            for (int knot = 1; knot < 10; knot++)
+            for (int knot = 1; knot < knots_count; knot++)
             {
                 if (!touching(knotpositions[knot - 1], knotpositions[knot]))
                 {
@@ -99,7 +100,7 @@ int main()
                         else
                             knotpositions[knot][0]--;
                     }
-                    if (knot == 9)
+                    if (knot == knots_count - 1)
                         addField(tailfieldsx, tailfieldsy, knotpositions[knot]);
                 }
             }
