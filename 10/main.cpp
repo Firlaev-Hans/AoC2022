@@ -2,8 +2,6 @@
 #include <fstream>
 #include <cmath>
 
-// Currently the output isn't 100% correct but good enough to read the letters. The last char of the 5th line is wrong.
-
 int main()
 {
     clock_t time = clock();
@@ -20,7 +18,7 @@ int main()
             sum += x_reg * cycles;
         }
 
-        if (fabs(cycles % 40 - x_reg - 1) <= 1)
+        if (fabs((cycles - 1) % 40 - x_reg) <= 1)
             crt += '#';
         else
             crt += '.';
@@ -34,7 +32,7 @@ int main()
                 sum += x_reg * (cycles + 1);
             }
 
-            if (fabs((cycles + 1) % 40 - x_reg - 1) <= 1)
+            if (fabs(cycles % 40 - x_reg) <= 1)
                 crt += '#';
             else
                 crt += '.';
@@ -51,7 +49,8 @@ int main()
     }
 
     input.close();
-    std::cout << crt << sum << std::endl
+    std::cout << "Image on CRT screen:\n"
+              << crt << "Sum of signal strengths: " << sum << std::endl
               << "Execution time: " << double(clock() - time) / CLOCKS_PER_SEC << std::endl;
     return 0;
 }
