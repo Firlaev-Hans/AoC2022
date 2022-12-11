@@ -2,27 +2,6 @@
 #include <fstream>
 #include <vector>
 
-int do_operation(std::string operation, unsigned int old)
-{
-    std::string second_number_s = operation.substr(operation.find_last_of(' ') + 1);
-    unsigned int second_number = 0, newval = 0;
-    if (second_number_s == "old")
-        second_number = old;
-    else
-        second_number = std::stoi(second_number_s);
-    switch (operation.at(4))
-    {
-    case '+':
-        newval = old + second_number;
-        break;
-    case '*':
-        newval = old * second_number;
-        break;
-    }
-    // std::cout << "\t\tWorry level " << operation.at(4) << " " << second_number_s << " = " << newval << std::endl;
-    return newval;
-}
-
 class Monkey
 {
 private:
@@ -47,36 +26,52 @@ public:
             std::cout << items[i] << ", ";
         }
     }
-    void inspect(std::vector<Monkey *> &monkeys, bool decrease_worry = false)
+    void do_operation(std::string operation, unsigned int &old)
+    {
+        std::string second_number_s = operation.substr(operation.find_last_of(' ') + 1);
+        unsigned int second_number = 0, newval = 0;
+        if (second_number_s == "old")
+            second_number = old;
+        else
+            second_number = std::stoi(second_number_s);
+        switch (operation.at(4))
+        {
+        case '+':
+            old += second_number;
+            break;
+        case '*':
+            old *= second_number;
+            break;
+        }
+        std::cout << "\t\tWorry level " << operation.at(4) << " " << second_number_s << " = " << old << std::endl;
+    }
+    void inspect(std::vector<Monkey *> &monkeys)
     {
         inspections++;
-        // std::cout << "\tInspecting item with worry level " << items[0] << ":\n";
-        items[0] = do_operation(operation, items[0]);
-        if (decrease_worry)
-        {
-            items[0] /= 3;
-            // std::cout << "\t\tMonkey gets bored with item. Worry level is divided by 3 to " << items[0] << std::endl;
-        }
+        std::cout << "\tInspecting item with worry level " << items[0] << ":\n";
+        do_operation(operation, items[0]);
+        items[0] /= 3;
+        std::cout << "\t\tMonkey gets bored with item. Worry level is divided by 3 to " << items[0] << std::endl;
+
         if (items[0] % divtest == 0)
         {
-            // std::cout << "\t\tCurrent worry level " << items[0] << " is divisible by " << divtest
-            //           << "\n\t\tItem with worry level " << items[0] << " is thrown to monkey " << monkey_true << std::endl;
+            std::cout << "\t\tCurrent worry level " << items[0] << " is divisible by " << divtest << "\n\t\tItem with worry level " << items[0] << " is thrown to monkey " << monkey_true << std::endl;
             monkeys[monkey_true]->push_item(items[0]);
             items.erase(items.begin());
         }
         else
         {
-            // std::cout << "\t\tCurrent worry level " << items[0] << " is not divisible by " << divtest
-            //           << "\n\t\tItem with worry level " << items[0] << " is thrown to monkey " << monkey_false << std::endl;
+            std::cout << "\t\tCurrent worry level " << items[0] << " is not divisible by " << divtest
+                      << "\n\t\tItem with worry level " << items[0] << " is thrown to monkey " << monkey_false << std::endl;
             monkeys[monkey_false]->push_item(items[0]);
             items.erase(items.begin());
         }
     }
-    void inspect_all(std::vector<Monkey *> &monkeys, bool decrease_worry = false)
+    void inspect_all(std::vector<Monkey *> &monkeys)
     {
         while (items.size() > 0)
         {
-            this->inspect(monkeys, decrease_worry);
+            this->inspect(monkeys);
         }
     }
 };
@@ -127,17 +122,14 @@ int main()
     input.close();
     for (int round = 0; round < 20; round++)
     {
-        if ((round + 1) % 1000 == 0 || round == 19)
-            std::cout << "\n===Round " << round + 1 << "===\n";
         for (int i = 0; i < monkeys.size(); i++)
         {
-            // std::cout << "Monkey " << i << ":\n";
-            monkeys[i]->inspect_all(monkeys, true);
+            std::cout << "Monkey " << i << ":\n";
+            monkeys[i]->inspect_all(monkeys);
         }
-        // std::cout << "End of Round " << round << std::endl;
+        std::cout << "End of Round " << round << std::endl;
         for (int i = 0; i < monkeys.size() && ((round + 1) % 1000 == 0 || round == 19); i++)
         {
-            std::cout << "Monkey " << i << " inspected " << monkeys[i]->get_inspections() << " times\n";
             std::cout << "Monkey " << i << ": ";
             monkeys[i]->print_items();
             std::cout << std::endl;
