@@ -82,13 +82,12 @@ int main()
     std::ifstream input("../11/input");
     std::string line;
     std::vector<Monkey *> monkeys;
-    for (int monkey = 0; getline(input, line);)
+    while (getline(input, line))
     {
         if (line == "")
             continue;
         if (line.at(0) == 'M')
         {
-            monkey++;
             monkeys.emplace_back(new Monkey{});
         }
         else if (line.at(2) == 'S')
